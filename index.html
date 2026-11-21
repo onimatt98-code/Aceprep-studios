@@ -6,221 +6,308 @@
   <title>AcePrep Studio – Dark Mode Exam, Attendance & AI Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     :root {
-      --bg: #0b0e14;
-      --surface: #121722;
-      --surface-2: #182030;
-      --border: #263147;
-      --text: #f3f4f6;
-      --muted: #9ca3af;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --accent: #10b981;
+      --bg: #070b14;
+      --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.16) 0px, transparent 50%),
+                 radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                 radial-gradient(at 50% 100%, rgba(59, 130, 246, 0.12) 0px, transparent 55%);
+      --surface: #0f172a;
+      --surface-elevated: #162033;
+      --surface-glass: rgba(15, 23, 42, 0.85);
+      --sidebar-bg: #090e1a;
+      --sidebar-hover: #172238;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.16);
+      --accent: #f59e0b;
+      --emerald: #10b981;
       --danger: #ef4444;
-      --warning: #f59e0b;
+      --border: rgba(148, 163, 184, 0.16);
+      --text: #f8fafc;
+      --muted: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      background-color: var(--bg);
+      background-image: var(--bg-mesh);
+      background-attachment: fixed;
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
       min-height: 100vh;
     }
 
-    header {
-      background: rgba(18, 23, 34, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    aside.sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 50;
+      height: 100vh;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 4px 8px 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--emerald));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    }
+    .brand h1 { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+    .brand span { font-size: 11.5px; color: var(--muted); display: block; }
+
+    .nav-list { display: flex; flex-direction: column; gap: 6px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 11px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: var(--primary-light);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Main Area */
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    header.topbar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo {
-      width: 34px; height: 34px; border-radius: 9px;
-      background: linear-gradient(135deg, #2563eb, #10b981);
-      display: grid; place-items: center; font-weight: 700; color: #fff;
-    }
-    .brand h1 { font-size: 17px; font-weight: 700; }
-    .brand span { font-size: 12px; color: var(--muted); display: block; }
 
-    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .pill {
-      background: var(--surface-2);
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .mobile-menu-btn {
+      display: none;
+      background: var(--surface-elevated);
       border: 1px solid var(--border);
       color: var(--text);
+      padding: 7px 11px;
+      border-radius: 9px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .page-title { font-size: 15.5px; font-weight: 700; }
+
+    .topbar-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge-pill {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
       padding: 6px 12px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
     }
 
-    .container { max-width: 1080px; margin: 0 auto; padding: 18px 16px 60px; }
+    .content {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 18px 64px;
+    }
 
     /* Track Cards */
     .tracks-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 12px;
       margin-bottom: 18px;
     }
     .track-card {
-      background: var(--surface);
+      background: var(--surface-glass);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 14px;
+      padding: 14px 16px;
       cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s;
+      transition: all 0.18s ease;
     }
-    .track-card:hover { border-color: var(--primary); }
+    .track-card:hover { border-color: var(--primary); transform: translateY(-1px); }
     .track-card.active {
       border-color: var(--primary);
-      background: linear-gradient(180deg, rgba(59, 130, 246, 0.12), var(--surface));
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.2), var(--surface));
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
     }
-    .track-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .track-name { font-weight: 700; font-size: 15px; }
-    .track-price {
-      background: rgba(16, 185, 129, 0.15);
+    .track-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .track-title { font-weight: 700; font-size: 15px; }
+    .price-tag {
+      background: rgba(16, 185, 129, 0.16);
       color: #34d399;
       padding: 3px 9px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11.5px;
+      font-weight: 700;
     }
-    .track-subjects { font-size: 12.5px; color: var(--muted); }
+    .track-sub { font-size: 12.5px; color: var(--muted); }
 
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .tab-btn {
-      background: var(--surface);
+    /* Cards & Panels */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 9px 14px;
-      border-radius: 10px;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    }
+    .card h2 { font-size: 16.5px; font-weight: 700; margin-bottom: 10px; }
+
+    /* Subject Bar */
+    .subject-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .subj-pill {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
     }
-    .tab-btn.active {
+    .subj-pill.active {
       background: var(--primary);
       border-color: var(--primary);
       color: #fff;
     }
 
-    .panel { display: none; }
-    .panel.active { display: block; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-    .card h2 { font-size: 16px; margin-bottom: 10px; }
-
-    /* Subject Pills */
-    .subject-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-    .subj-btn {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 7px 13px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .subj-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #052e16;
-    }
-
-    /* Interactive CBT Quiz Styles */
-    .ace-quiz-top {
+    /* Submittable JAMB CBT Quiz */
+    .cbt-toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 12px;
       margin-bottom: 14px;
     }
-    .ace-badge {
-      background: #1d283a;
-      color: #60a5fa;
+    .cbt-timer {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(245, 158, 11, 0.14);
       padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
+      border-radius: 8px;
+      font-size: 13px;
     }
-    .ace-muted { color: var(--muted); font-size: 13px; margin-left: 6px; }
-    .ace-q-card {
-      background: var(--surface-2);
+    .q-card {
+      background: var(--surface-elevated);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 14px;
+      padding: 15px;
       margin-bottom: 12px;
     }
-    .ace-q-title { font-weight: 600; margin-bottom: 10px; font-size: 14.5px; }
-    .ace-opt-label {
+    .q-text {
+      font-weight: 600;
+      font-size: 14.5px;
+      margin-bottom: 11px;
+    }
+    .opt-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #2b3750;
-      background: #101520;
+      padding: 10px 13px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(7, 11, 20, 0.65);
       margin-bottom: 8px;
       cursor: pointer;
       font-size: 14px;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, background 0.15s;
     }
-    .ace-opt-label:hover { border-color: var(--primary); }
-    .ace-opt-label.correct-opt {
-      border-color: #22c55e;
-      background: rgba(34, 197, 94, 0.14);
+    .opt-row:hover { border-color: var(--primary); }
+    .opt-row.is-correct {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.16);
     }
-    .ace-opt-label.wrong-opt {
-      border-color: #ef4444;
-      background: rgba(239, 68, 68, 0.14);
+    .opt-row.is-wrong {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.16);
     }
-    .ace-explanation {
-      margin-top: 8px;
+    .q-exp {
+      margin-top: 9px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      background: rgba(7, 11, 20, 0.8);
+      border-left: 3px solid var(--primary);
       font-size: 13px;
       color: #cbd5e1;
-      background: rgba(11, 14, 20, 0.75);
-      padding: 9px 11px;
-      border-radius: 8px;
-      border-left: 3px solid var(--primary);
     }
-    .ace-result-box {
+    .result-banner {
       margin-top: 16px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #0f1b2d;
+      padding: 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(16, 185, 129, 0.14));
       border: 1px solid var(--primary);
     }
-    .ace-history-item {
+    .history-row {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
@@ -230,13 +317,13 @@
       font-size: 13px;
     }
 
-    /* Inputs & Buttons */
+    /* Form Controls */
     input, select, textarea {
       width: 100%;
-      background: #0e131d;
+      background: #080d18;
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 10px 13px;
       border-radius: 10px;
       font-family: inherit;
       font-size: 14px;
@@ -250,7 +337,7 @@
       background: var(--primary);
       color: #fff;
       border: none;
-      padding: 10px 16px;
+      padding: 10px 18px;
       border-radius: 10px;
       font-weight: 600;
       font-size: 13.5px;
@@ -258,6 +345,7 @@
     }
     .btn:hover { background: var(--primary-hover); }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-emerald { background: var(--emerald); color: #052e16; }
     .btn-ghost {
       background: transparent;
       border: 1px solid var(--border);
@@ -268,10 +356,9 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-accent { background: var(--accent); color: #052e16; }
 
-    /* Chat & Feed */
-    .feed-list {
+    /* Feeds & PDF */
+    .feed-box {
       max-height: 320px;
       overflow-y: auto;
       display: flex;
@@ -279,232 +366,249 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .msg-bubble {
-      background: var(--surface-2);
+    .bubble {
+      background: var(--surface-elevated);
       border: 1px solid var(--border);
-      padding: 10px 13px;
+      padding: 11px 14px;
       border-radius: 12px;
       font-size: 13.5px;
     }
-    .msg-bubble.ai {
-      border-color: #2563eb;
-      background: #10192b;
+    .bubble.ai {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.12);
     }
-    .msg-meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .meta { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
 
-    /* PDF Canvas */
-    #pdf-canvas-wrap {
-      overflow-x: auto;
-      background: #090c12;
+    #pdf-viewer-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #060911;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 12px;
       text-align: center;
-      margin-top: 10px;
+      overflow-x: auto;
     }
     canvas { max-width: 100%; height: auto; border-radius: 6px; }
+    .flex-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-    .row-flex { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    @media (max-width: 820px) {
+      aside.sidebar {
+        position: fixed;
+        left: -270px;
+        z-index: 60;
+        transition: left 0.22s ease;
+      }
+      aside.sidebar.open { left: 0; }
+      .mobile-menu-btn { display: inline-block; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-logo">AP</div>
+<div class="app-shell">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
     <div>
-      <h1>AcePrep Studio</h1>
-      <span>JAMB/UTME CBT • Notes • Attendance • AI Tutor</span>
-    </div>
-  </div>
-  <div class="header-actions">
-    <span class="pill" id="candidate-badge">Guest Candidate</span>
-    <span class="pill" id="streak-badge">Streak: 0 🔥</span>
-    <button class="btn-ghost" onclick="promptCandidateName()">Set Name</button>
-  </div>
-</header>
-
-<div class="container">
-  <!-- Track Selector & Pricing -->
-  <div class="tracks-grid" id="tracks-container"></div>
-
-  <!-- Main Navigation -->
-  <div class="nav-tabs">
-    <button class="tab-btn active" data-tab="quiz-panel">JAMB CBT Quiz</button>
-    <button class="tab-btn" data-tab="notes-panel">Study Notes & PDF Vault</button>
-    <button class="tab-btn" data-tab="attendance-panel">Class Attendance</button>
-    <button class="tab-btn" data-tab="self-panel">Message Yourself</button>
-    <button class="tab-btn" data-tab="ai-panel">Open AI Tutor</button>
-    <button class="tab-btn" data-tab="admin-panel">Admin Studio</button>
-  </div>
-
-  <!-- 1. CBT QUIZ PANEL -->
-  <section id="quiz-panel" class="panel active">
-    <div class="card">
-      <div class="subject-bar" id="quiz-subjects-bar"></div>
-
-      <div class="ace-quiz-top">
+      <div class="brand">
+        <div class="brand-icon">AP</div>
         <div>
-          <span class="ace-badge" id="quiz-subject-badge">Physics</span>
-          <span class="ace-muted" id="quiz-progress-text">0 answered</span>
-        </div>
-        <div class="row-flex">
-          <button type="button" class="btn-ghost" id="shuffle-quiz-btn">Shuffle</button>
-          <button type="button" class="btn-ghost" id="reset-quiz-btn">Reset</button>
+          <h1>AcePrep Studio</h1>
+          <span>UTME CBT & Study Hub</span>
         </div>
       </div>
 
-      <div id="quiz-questions-box"></div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-panel="panel-quiz" data-title="JAMB CBT Exam Practice">📝 JAMB CBT Quiz</button>
+        <button class="nav-item" data-panel="panel-notes" data-title="Syllabus Notes & PDF Vault">📚 Notes & PDF Vault</button>
+        <button class="nav-item" data-panel="panel-attendance" data-title="Daily Class Attendance">✅ Class Attendance</button>
+        <button class="nav-item" data-panel="panel-self" data-title="Message Yourself Scratchpad">💬 Message Yourself</button>
+        <button class="nav-item" data-panel="panel-ai" data-title="Open AI JAMB Tutor">🤖 Open AI Tutor</button>
+        <button class="nav-item" data-panel="panel-admin" data-title="Admin Studio">🔐 Admin Studio</button>
+      </nav>
+    </div>
 
-      <div class="row-flex" style="justify-content: flex-end; margin-top: 12px;">
-        <button type="button" class="btn" id="submit-quiz-btn">Submit Quiz</button>
+    <div class="sidebar-footer">
+      <div><strong>Fee Structure:</strong></div>
+      <div>₦11,000 / subject • ₦44,000 / track</div>
+      <div style="margin-top:6px;">Tracks: Science • Art • Commercial</div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+        <span class="page-title" id="topbar-title">JAMB CBT Exam Practice</span>
       </div>
-
-      <div id="quiz-result-box" class="ace-result-box" style="display: none;"></div>
-
-      <div id="quiz-history-box" style="margin-top: 18px;"></div>
-    </div>
-  </section>
-
-  <!-- 2. STUDY NOTES & PDF VAULT -->
-  <section id="notes-panel" class="panel">
-    <div class="card">
-      <h2>Quick Syllabus Revision Notes</h2>
-      <div class="subject-bar" id="notes-subjects-bar"></div>
-      <div id="notes-display"></div>
-    </div>
-
-    <div class="card">
-      <h2>PDF Past Question & Handout Viewer</h2>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">
-        Upload any JAMB past question or study PDF from your device to read page by page.
-      </p>
-      <input type="file" id="pdf-upload-input" accept="application/pdf" />
-      <div class="row-flex" id="pdf-controls" style="display: none;">
-        <button class="btn-ghost" id="pdf-prev">Prev Page</button>
-        <span id="pdf-page-info" style="font-size: 13px;">Page 1 of 1</span>
-        <button class="btn-ghost" id="pdf-next">Next Page</button>
+      <div class="topbar-badges">
+        <span class="badge-pill" id="candidate-name-pill">Guest Candidate</span>
+        <span class="badge-pill" id="streak-pill">Streak: 0 🔥</span>
+        <button class="btn-ghost" onclick="setCandidateName()">Edit Name</button>
       </div>
-      <div id="pdf-canvas-wrap" style="display: none;">
-        <canvas id="pdf-canvas"></canvas>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- 3. CLASS ATTENDANCE -->
-  <section id="attendance-panel" class="panel">
-    <div class="card">
-      <h2>Daily Class Check-In</h2>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
-        Mark your daily presence and log the topic studied today.
-      </p>
-      <input type="text" id="att-name" placeholder="Candidate Full Name" />
-      <select id="att-track">
-        <option value="Science">Science Track (₦11,000/subject • ₦44,000 total)</option>
-        <option value="Art">Art Track (₦11,000/subject • ₦44,000 total)</option>
-        <option value="Commercial">Commercial Track (₦11,000/subject • ₦44,000 total)</option>
-      </select>
-      <input type="text" id="att-topic" placeholder="Topic covered today (e.g., Projectile Motion, Concord)" />
-      <button class="btn btn-accent" onclick="markAttendance()">Mark Present Today</button>
-    </div>
+    <main class="content">
+      <!-- Track & Pricing Selector -->
+      <div class="tracks-grid" id="tracks-grid"></div>
 
-    <div class="card">
-      <h2>Your Attendance Log</h2>
-      <div id="attendance-log-list"></div>
-    </div>
-  </section>
+      <!-- 1. CBT QUIZ PANEL -->
+      <section id="panel-quiz" class="panel active">
+        <div class="card">
+          <div class="subject-pills" id="quiz-subject-pills"></div>
 
-  <!-- 4. MESSAGE YOURSELF -->
-  <section id="self-panel" class="panel">
-    <div class="card">
-      <h2>Message Yourself (Personal Formula & Exam Scratchpad)</h2>
-      <div class="feed-list" id="self-feed"></div>
-      <textarea id="self-input" rows="2" placeholder="Save a formula, mnemonic, or study target..."></textarea>
-      <button class="btn" onclick="sendSelfMessage()">Save Note</button>
-    </div>
-  </section>
+          <div class="cbt-toolbar">
+            <div>
+              <strong id="active-quiz-label">Science • Physics</strong>
+              <span id="answered-counter" style="color:var(--muted); font-size:13px; margin-left:8px;">0 answered</span>
+            </div>
+            <div class="flex-row">
+              <span class="cbt-timer" id="cbt-timer">⏱ 10:00</span>
+              <button type="button" class="btn-ghost" id="btn-shuffle">Shuffle</button>
+              <button type="button" class="btn-ghost" id="btn-reset">Reset</button>
+            </div>
+          </div>
 
-  <!-- 5. OPEN AI TUTOR -->
-  <section id="ai-panel" class="panel">
-    <div class="card">
-      <h2>AcePrep Open AI Tutor</h2>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">
-        Ask any JAMB question across Science, Art, or Commercial. Works offline with built-in syllabus explanations or connects to an optional OpenAI-compatible API key.
-      </p>
-      <input type="password" id="ai-api-key" placeholder="Optional API Key (leave blank for built-in JAMB tutor)" />
-      <div class="feed-list" id="ai-chat-feed"></div>
-      <div class="row-flex">
-        <input type="text" id="ai-question-input" placeholder="e.g. Explain projectile motion formula or Trial Balance errors..." style="margin-bottom: 0; flex: 1;" />
-        <button class="btn" onclick="askAiTutor()">Ask</button>
-      </div>
-    </div>
-  </section>
+          <div id="quiz-container"></div>
 
-  <!-- 6. ADMIN STUDIO -->
-  <section id="admin-panel" class="panel">
-    <div class="card" id="admin-lock-box">
-      <h2>Admin Studio Access</h2>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">
-        Enter your Admin Passcode to add or bulk-import JAMB questions, edit notes, and inspect attendance records.
-      </p>
-      <input type="password" id="admin-code-input" placeholder="Enter Admin Code" />
-      <button class="btn" onclick="unlockAdmin()">Unlock Studio</button>
-    </div>
+          <div class="flex-row" style="justify-content: flex-end; margin-top: 14px;">
+            <button type="button" class="btn" id="btn-submit-quiz">Submit Quiz</button>
+          </div>
 
-    <div id="admin-workspace" style="display: none;">
-      <div class="card">
-        <h2>Add Single JAMB Question</h2>
-        <select id="adm-subject"></select>
-        <input type="text" id="adm-q" placeholder="Question text" />
-        <input type="text" id="adm-opt0" placeholder="Option A" />
-        <input type="text" id="adm-opt1" placeholder="Option B" />
-        <input type="text" id="adm-opt2" placeholder="Option C" />
-        <input type="text" id="adm-opt3" placeholder="Option D" />
-        <select id="adm-ans">
-          <option value="0">Correct Option: A</option>
-          <option value="1">Correct Option: B</option>
-          <option value="2">Correct Option: C</option>
-          <option value="3">Correct Option: D</option>
-        </select>
-        <input type="text" id="adm-exp" placeholder="Short explanation / working" />
-        <button class="btn btn-accent" onclick="adminAddQuestion()">Save Question to Bank</button>
-      </div>
+          <div id="quiz-result-area" class="result-banner" style="display: none;"></div>
+          <div id="quiz-attempts-area" style="margin-top: 18px;"></div>
+        </div>
+      </section>
 
-      <div class="card">
-        <h2>Bulk JSON Question Importer (Add 100s at once)</h2>
-        <p style="font-size: 12.5px; color: var(--muted); margin-bottom: 8px;">
-          Paste a JSON array of questions for the selected subject above:
-          <code>[{"q":"...","options":["A","B","C","D"],"answer":0,"explanation":"..."}]</code>
-        </p>
-        <textarea id="adm-bulk-json" rows="4" placeholder='[{"q":"What is the SI unit of impulse?","options":["N/s","N·s","J/s","W"],"answer":1,"explanation":"Impulse = Force × time (N·s)."}]'></textarea>
-        <button class="btn" onclick="adminBulkImport()">Import Batch</button>
-      </div>
+      <!-- 2. NOTES & PDF VAULT -->
+      <section id="panel-notes" class="panel">
+        <div class="card">
+          <h2>High-Yield JAMB Revision Notes</h2>
+          <div class="subject-pills" id="notes-subject-pills"></div>
+          <div id="notes-content-box"></div>
+        </div>
 
-      <div class="card">
-        <h2>All Attendance Records</h2>
-        <div id="admin-attendance-view"></div>
-      </div>
-    </div>
-  </section>
+        <div class="card">
+          <h2>PDF Past Questions & Handouts Reader</h2>
+          <p style="font-size:13px; color:var(--muted); margin-bottom:10px;">
+            Select any PDF file from your phone or computer to view it right inside AcePrep Studio.
+          </p>
+          <input type="file" id="pdf-file-input" accept="application/pdf" />
+          <div class="flex-row" id="pdf-nav-bar" style="display:none; margin-bottom:8px;">
+            <button class="btn-ghost" id="pdf-prev-btn">◀ Prev</button>
+            <span id="pdf-page-label" style="font-size:13px;">Page 1 of 1</span>
+            <button class="btn-ghost" id="pdf-next-btn">Next ▶</button>
+          </div>
+          <div id="pdf-viewer-box" style="display:none;">
+            <canvas id="pdf-render-canvas"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. CLASS ATTENDANCE -->
+      <section id="panel-attendance" class="panel">
+        <div class="card">
+          <h2>Mark Daily Class Attendance</h2>
+          <input type="text" id="att-candidate" placeholder="Candidate Full Name" />
+          <select id="att-track-select">
+            <option value="Science">Science Track (₦11,000/subject • ₦44,000 total)</option>
+            <option value="Art">Art Track (₦11,000/subject • ₦44,000 total)</option>
+            <option value="Commercial">Commercial Track (₦11,000/subject • ₦44,000 total)</option>
+          </select>
+          <input type="text" id="att-topic-input" placeholder="Today's Topic (e.g., Electrolysis, Concord, Elasticity)" />
+          <button class="btn btn-emerald" onclick="recordAttendance()">Check In Present</button>
+        </div>
+
+        <div class="card">
+          <h2>Attendance History</h2>
+          <div id="attendance-feed"></div>
+        </div>
+      </section>
+
+      <!-- 4. MESSAGE YOURSELF -->
+      <section id="panel-self" class="panel">
+        <div class="card">
+          <h2>Message Yourself (Personal Study Scratchpad)</h2>
+          <div class="feed-box" id="self-messages-box"></div>
+          <textarea id="self-msg-input" rows="2" placeholder="Jot down formulas, vocab words, or revision reminders..."></textarea>
+          <button class="btn" onclick="addSelfMessage()">Save Message</button>
+        </div>
+      </section>
+
+      <!-- 5. OPEN AI TUTOR -->
+      <section id="panel-ai" class="panel">
+        <div class="card">
+          <h2>Open AI JAMB Tutor</h2>
+          <p style="font-size:13px; color:var(--muted); margin-bottom:10px;">
+            Ask any exam question. Works immediately with built-in JAMB explanations or with an optional OpenAI-compatible API key.
+          </p>
+          <input type="password" id="openai-key-input" placeholder="Optional API Key (leave empty for built-in tutor)" />
+          <div class="feed-box" id="ai-messages-box"></div>
+          <div class="flex-row">
+            <input type="text" id="ai-prompt-input" placeholder="Ask a question (e.g., Explain projectile height or Trial Balance errors)..." style="margin-bottom:0; flex:1;" />
+            <button class="btn" onclick="sendAiPrompt()">Ask</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ADMIN STUDIO -->
+      <section id="panel-admin" class="panel">
+        <div class="card" id="admin-gate">
+          <h2>Admin Studio Protection</h2>
+          <p style="font-size:13px; color:var(--muted); margin-bottom:10px;">
+            Enter your secret admin passcode to add questions, bulk-import CBT packs, and view all attendance logs.
+          </p>
+          <input type="password" id="admin-passcode" placeholder="Admin Passcode" />
+          <button class="btn" onclick="verifyAdmin()">Unlock Admin Studio</button>
+        </div>
+
+        <div id="admin-panel-body" style="display:none;">
+          <div class="card">
+            <h2>Add New JAMB Question</h2>
+            <select id="admin-subj-select"></select>
+            <input type="text" id="admin-q-text" placeholder="Question text" />
+            <input type="text" id="admin-opt-a" placeholder="Option A" />
+            <input type="text" id="admin-opt-b" placeholder="Option B" />
+            <input type="text" id="admin-opt-c" placeholder="Option C" />
+            <input type="text" id="admin-opt-d" placeholder="Option D" />
+            <select id="admin-correct-opt">
+              <option value="0">Correct Answer: A</option>
+              <option value="1">Correct Answer: B</option>
+              <option value="2">Correct Answer: C</option>
+              <option value="3">Correct Answer: D</option>
+            </select>
+            <input type="text" id="admin-exp-text" placeholder="Step-by-step explanation" />
+            <button class="btn btn-emerald" onclick="addSingleQuestion()">Add Question</button>
+          </div>
+
+          <div class="card">
+            <h2>Bulk Import Question Pack (JSON)</h2>
+            <p style="font-size:12.5px; color:var(--muted); margin-bottom:8px;">
+              Paste a JSON array for the selected subject above to add dozens or hundreds of questions at once:
+              <code>[{"q":"...","options":["A","B","C","D"],"answer":0,"explanation":"..."}]</code>
+            </p>
+            <textarea id="admin-json-pack" rows="4" placeholder='[{"q":"What is the unit of power?","options":["Joule","Watt","Newton","Pascal"],"answer":1,"explanation":"Power = Work / Time, measured in Watts (W)."}]'></textarea>
+            <button class="btn" onclick="importJsonPack()">Import JSON Pack</button>
+          </div>
+
+          <div class="card">
+            <h2>All Student Attendance Logs</h2>
+            <div id="admin-att-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </div>
 
 <script>
-  const TRACKS = {
-    Science: {
-      pricePerSubject: 11000,
-      subjects: ["Physics", "Mathematics", "English", "Chemistry"]
-    },
-    Art: {
-      pricePerSubject: 11000,
-      subjects: ["Literature", "Government", "English", "CRS / IRS"]
-    },
-    Commercial: {
-      pricePerSubject: 11000,
-      subjects: ["Economics", "Banking & Finance", "Accounting", "Commerce"]
-    }
+  const TRACK_DATA = {
+    Science: { fee: 11000, subjects: ["Physics", "Mathematics", "English", "Chemistry"] },
+    Art: { fee: 11000, subjects: ["Literature", "Government", "English", "CRS / IRS"] },
+    Commercial: { fee: 11000, subjects: ["Economics", "Banking & Finance", "Accounting", "Commerce"] }
   };
 
-  const DEFAULT_QUESTIONS = {
+  const JAMB_BANK = {
     "Physics": [
       {
         q: "A projectile is fired at an angle of 30° to the horizontal with a velocity of 40 m/s. Calculate the maximum height reached. (g = 10 m/s²)",
@@ -516,7 +620,7 @@
         q: "Which of the following pairs of physical quantities has the same SI unit?",
         options: ["Impulse and momentum", "Force and power", "Work and power", "Pressure and force"],
         answer: 0,
-        explanation: "Both impulse (F·t) and momentum (m·v) are measured in N·s or kg·m/s."
+        explanation: "Both impulse (F·t) and momentum (m·v) have the SI unit N·s or kg·m/s."
       },
       {
         q: "An object is placed 15 cm in front of a converging lens of focal length 10 cm. The image formed is:",
@@ -534,7 +638,7 @@
         q: "The escape velocity of a body from the Earth's gravitational field depends on:",
         options: ["Mass of the body only", "Mass and radius of the Earth", "Shape of the body", "Angle of projection"],
         answer: 1,
-        explanation: "Escape velocity v = √(2GM/R), which depends on the mass (M) and radius (R) of the Earth."
+        explanation: "Escape velocity v = √(2GM/R), which depends on Earth's mass (M) and radius (R)."
       }
     ],
     "Mathematics": [
@@ -568,19 +672,19 @@
         q: "Choose the option nearest in meaning to the bold word: The chairman's speech was full of HACKNEYED expressions.",
         options: ["Original", "Overused", "Offensive", "Humorous"],
         answer: 1,
-        explanation: "'Hackneyed' means stale or unoriginal because of frequent overuse."
+        explanation: "'Hackneyed' means stale or unoriginal due to frequent overuse."
       },
       {
         q: "Choose the option opposite in meaning to the bold word: The witness gave a CANDID account of the incident.",
         options: ["Evasive", "Frank", "Detailed", "Brief"],
         answer: 0,
-        explanation: "'Candid' means open, honest, and straightforward; its opposite is 'evasive'."
+        explanation: "'Candid' means open and frank; its opposite is 'evasive'."
       },
       {
         q: "Choose the word that has the same vowel sound as the underlined letters in: b(oo)k",
         options: ["Pool", "Food", "Could", "Fool"],
         answer: 2,
-        explanation: "'Book' and 'could' both share the short /ʊ/ vowel sound."
+        explanation: "'Book' and 'could' both contain the short /ʊ/ vowel sound."
       },
       {
         q: "Fill in the blank: Neither the principal nor the teachers _____ aware of the sudden inspection.",
@@ -594,25 +698,25 @@
         q: "What volume of oxygen at s.t.p. is required to burn 20 cm³ of carbon(II) oxide completely?",
         options: ["10 cm³", "20 cm³", "40 cm³", "5 cm³"],
         answer: 0,
-        explanation: "2CO + O₂ → 2CO₂. Volume ratio CO : O₂ is 2 : 1, so 20 cm³ CO requires 10 cm³ O₂."
+        explanation: "2CO + O₂ → 2CO₂. Ratio CO : O₂ = 2 : 1, so 20 cm³ CO requires 10 cm³ O₂."
       },
       {
         q: "Which of the following salts will undergo hydrolysis in water to give an alkaline solution?",
         options: ["NH₄Cl", "Na₂CO₃", "NaCl", "CuSO₄"],
         answer: 1,
-        explanation: "Na₂CO₃ is formed from a strong base (NaOH) and weak acid (H₂CO₃), producing an alkaline solution."
+        explanation: "Na₂CO₃ is formed from a strong base (NaOH) and weak acid (H₂CO₃), yielding an alkaline solution."
       },
       {
         q: "The IUPAC name for CH₃CH(CH₃)CH₂OH is:",
         options: ["2-methylpropan-1-ol", "2-methylpropan-2-ol", "Butan-2-ol", "3-methylpropan-1-ol"],
         answer: 0,
-        explanation: "Longest chain has 3 carbons with -OH on C-1 and a methyl substituent on C-2."
+        explanation: "Longest chain has 3 carbons with -OH on C-1 and a methyl group on C-2."
       },
       {
         q: "In the electrolysis of brine using inert electrodes, the gas liberated at the anode is:",
         options: ["Hydrogen", "Oxygen", "Chlorine", "Nitrogen"],
         answer: 2,
-        explanation: "High concentration of Cl⁻ ions favors preferential discharge of chlorine gas at the anode."
+        explanation: "High concentration of Cl⁻ ions leads to preferential discharge of chlorine gas at the anode."
       }
     ],
     "Literature": [
@@ -620,13 +724,13 @@
         q: "A poem of fourteen lines written in iambic pentameter with a specific rhyme scheme is a:",
         options: ["Ballad", "Sonnet", "Dirge", "Ode"],
         answer: 1,
-        explanation: "A sonnet is a 14-line lyric poem traditionally composed in iambic pentameter."
+        explanation: "A sonnet is a 14-line lyric poem traditionally written in iambic pentameter."
       },
       {
         q: "'The wind whispered secrets through the palm fronds' is an example of:",
         options: ["Hyperbole", "Oxymoron", "Personification", "Synecdoche"],
         answer: 2,
-        explanation: "Human action ('whispered') is attributed to an inanimate natural element ('wind')."
+        explanation: "Human action ('whispered') is attributed to an inanimate natural force ('wind')."
       },
       {
         q: "In drama, a speech delivered by a character alone on stage to reveal inner thoughts to the audience is a:",
@@ -739,521 +843,538 @@
     ]
   };
 
-  const SYLLABUS_NOTES = {
-    "Physics": "Key JAMB Formulas: v = u + at | s = ut + ½at² | v² = u² + 2as | Projectile Max Height H = (u²sin²θ)/2g | Range R = (u²sin2θ)/g | Mirror/Lens: 1/f = 1/u + 1/v | Electrical Power P = IV = I²R = V²/R.",
-    "Mathematics": "High-Yield Topics: Indices & Logarithms, Quadratic Equations (sum = -b/a, product = c/a), AP (Tₙ = a + (n-1)d), GP (Tₙ = arⁿ⁻¹), Differentiation & Integration, Permutations & Combinations.",
-    "English": "UTME Focus Areas: Lexis & Structure (Synonyms, Antonyms, Idioms), Concord (Subject-Verb Agreement), Oral English (Vowel/Consonant sounds, Emphatic Stress), and Comprehension.",
-    "Chemistry": "Must-Know Concepts: Stoichiometry & Gas Laws (PV = nRT), Periodic Table Trends, Acids/Bases/Salts Hydrolysis, Electrolysis (Faraday's Laws), and IUPAC Organic Nomenclature.",
-    "Literature": "Core Areas: Figures of Speech (Metaphor, Personification, Oxymoron, Irony, Synecdoche), Literary Terms (Soliloquy, Aside, Catharsis, Tragic Flaw), and Unseen Poetry/Prose.",
-    "Government": "Key Topics: Arms & Organs of Government, Separation of Powers, Pre-colonial Administration in Nigeria, Constitutional Development (1922 Clifford to 1999), and ECOWAS/AU/UN.",
-    "CRS / IRS": "Revision Focus: Leadership of Moses, Joshua, Samuel, David & Solomon; Temptation & Sermon on the Mount (CRS) | Revelation of the Qur'an, Articles of Faith, Hijrah & Four Rightly Guided Caliphs (IRS).",
-    "Economics": "Core Principles: Demand & Supply, Price Elasticity (PED = %ΔQd / %ΔP), Production & Cost Curves, Market Structures, National Income, Central Bank & Monetary Policy.",
-    "Banking & Finance": "Key Focus: Functions of Commercial & Central Banks, Cheques & Crossings, Money vs Capital Markets, Financial Instruments (Treasury Bills, Bonds, Shares).",
-    "Accounting": "Exam Essentials: Double Entry Principle, Cash Book & Bank Reconciliation, Errors Not Affecting Trial Balance (Omission, Commission, Principle, Original Entry, Compensating), Final Accounts.",
-    "Commerce": "Key Topics: Occupation & Production, Home & Foreign Trade (Balance of Trade vs Balance of Payments), Commercial Documents (Invoice, Credit/Debit Note), Insurance & Warehousing."
+  const REVISION_NOTES = {
+    "Physics": "Formulas: v = u + at | s = ut + ½at² | v² = u² + 2as | Max Height H = (u²sin²θ)/2g | Range R = (u²sin2θ)/g | Mirror/Lens: 1/f = 1/u + 1/v | Power P = IV = I²R = V²/R.",
+    "Mathematics": "Focus: Indices & Logarithms, Quadratic Roots (α+β = -b/a, αβ = c/a), AP (Tₙ = a + (n-1)d), GP (Tₙ = arⁿ⁻¹), Differentiation, Integration & Permutations.",
+    "English": "Focus: Lexis & Structure (Synonyms, Antonyms, Idioms), Concord (Subject-Verb Agreement), Oral English (Vowel/Consonant sounds, Emphatic Stress), and Comprehension.",
+    "Chemistry": "Focus: Stoichiometry & Gas Laws (PV = nRT), Periodic Trends, Salt Hydrolysis, Electrolysis (Faraday's Laws), and IUPAC Organic Nomenclature.",
+    "Literature": "Focus: Figures of Speech (Metaphor, Personification, Oxymoron, Irony, Synecdoche), Dramatic Terms (Soliloquy, Aside, Catharsis, Tragic Flaw), and Unseen Poetry.",
+    "Government": "Focus: Separation of Powers, Pre-colonial Administration in Nigeria, Constitutional Development (1922 Clifford to 1999), and ECOWAS/AU/UN.",
+    "CRS / IRS": "Focus: Leadership of Moses, Joshua, Samuel, David & Solomon; Temptation & Sermon on the Mount (CRS) | Revelation of Qur'an, Articles of Faith & Caliphs (IRS).",
+    "Economics": "Focus: Demand & Supply, Price Elasticity (PED = %ΔQd / %ΔP), Cost Curves, Market Structures, National Income, and CBN Monetary Policy.",
+    "Banking & Finance": "Focus: Commercial vs Central Bank Functions, Cheques & Crossings, Money vs Capital Markets, Treasury Bills & Bonds.",
+    "Accounting": "Focus: Double Entry, Bank Reconciliation, Errors Not Affecting Trial Balance (Omission, Commission, Principle, Original Entry, Compensating), Final Accounts.",
+    "Commerce": "Focus: Occupation & Production, Home & Foreign Trade (Balance of Trade vs Balance of Payments), Commercial Documents, Insurance & Warehousing."
   };
 
-  // App State
-  let currentTrack = "Science";
-  let currentSubject = "Physics";
-  let questionBank = JSON.parse(localStorage.getItem("aceprep_qbank_v2") || "null") || DEFAULT_QUESTIONS;
-  let userSelections = {};
-  let quizSubmitted = false;
-  let streak = Number(localStorage.getItem("aceprep_streak") || 0);
+  let activeTrack = "Science";
+  let activeSubject = "Physics";
+  let bank = JSON.parse(localStorage.getItem("aceprep_bank_v3") || "null") || JAMB_BANK;
+  let answersMap = {};
+  let submitted = false;
+  let streakCount = Number(localStorage.getItem("aceprep_streak_v3") || 0);
+  let timerSeconds = 600;
+  let timerInterval = null;
 
-  function saveQuestionBank() {
-    localStorage.setItem("aceprep_qbank_v2", JSON.stringify(questionBank));
+  function persistBank() {
+    localStorage.setItem("aceprep_bank_v3", JSON.stringify(bank));
   }
 
-  function initHeader() {
-    const savedName = localStorage.getItem("aceprep_candidate_name");
-    if (savedName) {
-      document.getElementById("candidate-badge").textContent = savedName;
-      const attInput = document.getElementById("att-name");
-      if (attInput && !attInput.value) attInput.value = savedName;
-    }
-    document.getElementById("streak-badge").textContent = `Streak: ${streak} 🔥`;
+  window.toggleSidebar = function () {
+    document.getElementById("sidebar").classList.toggle("open");
+  };
+
+  function syncProfileUI() {
+    const name = localStorage.getItem("aceprep_user_name") || "Guest Candidate";
+    document.getElementById("candidate-name-pill").textContent = name;
+    document.getElementById("streak-pill").textContent = `Streak: ${streakCount} 🔥`;
+    const attField = document.getElementById("att-candidate");
+    if (attField && !attField.value && name !== "Guest Candidate") attField.value = name;
   }
 
-  window.promptCandidateName = function () {
-    const name = prompt("Enter Candidate Name:", localStorage.getItem("aceprep_candidate_name") || "");
-    if (name && name.trim()) {
-      localStorage.setItem("aceprep_candidate_name", name.trim());
-      initHeader();
+  window.setCandidateName = function () {
+    const val = prompt("Enter Candidate Full Name:", localStorage.getItem("aceprep_user_name") || "");
+    if (val && val.trim()) {
+      localStorage.setItem("aceprep_user_name", val.trim());
+      syncProfileUI();
     }
   };
 
-  function renderTracks() {
-    const container = document.getElementById("tracks-container");
-    container.innerHTML = Object.entries(TRACKS)
-      .map(([name, info]) => {
-        const total = info.pricePerSubject * info.subjects.length;
-        const activeClass = name === currentTrack ? "active" : "";
+  function renderTrackCards() {
+    document.getElementById("tracks-grid").innerHTML = Object.entries(TRACK_DATA)
+      .map(([track, data]) => {
+        const totalFee = data.fee * data.subjects.length;
         return `
-          <div class="track-card ${activeClass}" onclick="selectTrack('${name}')">
-            <div class="track-top">
-              <span class="track-name">${name} Track</span>
-              <span class="track-price">₦${info.pricePerSubject.toLocaleString()}/subj • ₦${total.toLocaleString()}</span>
+          <div class="track-card ${track === activeTrack ? "active" : ""}" onclick="chooseTrack('${track}')">
+            <div class="track-header">
+              <span class="track-title">${track} Track</span>
+              <span class="price-tag">₦${data.fee.toLocaleString()}/subj • ₦${totalFee.toLocaleString()}</span>
             </div>
-            <div class="track-subjects">${info.subjects.join(" • ")}</div>
+            <div class="track-sub">${data.subjects.join(" • ")}</div>
           </div>
         `;
       })
       .join("");
   }
 
-  window.selectTrack = function (trackName) {
-    currentTrack = trackName;
-    currentSubject = TRACKS[trackName].subjects[0];
-    renderTracks();
-    renderSubjectBars();
-    renderQuiz();
-    renderNotes();
+  window.chooseTrack = function (track) {
+    activeTrack = track;
+    activeSubject = TRACK_DATA[track].subjects[0];
+    renderTrackCards();
+    renderSubjectPills();
+    renderCbtQuiz();
+    renderRevisionNotes();
   };
 
-  function renderSubjectBars() {
-    const subjects = TRACKS[currentTrack].subjects;
-    const html = subjects
+  function renderSubjectPills() {
+    const html = TRACK_DATA[activeTrack].subjects
       .map(
-        (subj) => `
-        <button class="subj-btn ${subj === currentSubject ? "active" : ""}" onclick="selectSubject('${subj}')">
-          ${subj} (${(questionBank[subj] || []).length})
+        (s) => `
+        <button class="subj-pill ${s === activeSubject ? "active" : ""}" onclick="chooseSubject('${s}')">
+          ${s} (${(bank[s] || []).length})
         </button>
       `
       )
       .join("");
-
-    document.getElementById("quiz-subjects-bar").innerHTML = html;
-    document.getElementById("notes-subjects-bar").innerHTML = html;
+    document.getElementById("quiz-subject-pills").innerHTML = html;
+    document.getElementById("notes-subject-pills").innerHTML = html;
   }
 
-  window.selectSubject = function (subj) {
-    currentSubject = subj;
-    renderSubjectBars();
-    renderQuiz();
-    renderNotes();
+  window.chooseSubject = function (subj) {
+    activeSubject = subj;
+    renderSubjectPills();
+    renderCbtQuiz();
+    renderRevisionNotes();
   };
 
-  // Interactive Quiz Engine
-  function updateProgress(total) {
-    const count = Object.keys(userSelections).length;
-    document.getElementById("quiz-progress-text").textContent = `${count} of ${total} answered`;
+  function startTimer(questionCount) {
+    clearInterval(timerInterval);
+    timerSeconds = Math.max(questionCount * 60, 120);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      if (submitted) {
+        clearInterval(timerInterval);
+        return;
+      }
+      timerSeconds -= 1;
+      updateTimerDisplay();
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        gradeQuiz(true);
+      }
+    }, 1000);
   }
 
-  function renderQuiz() {
-    userSelections = {};
-    quizSubmitted = false;
-    const questions = questionBank[currentSubject] || [];
-    document.getElementById("quiz-subject-badge").textContent = `${currentTrack} • ${currentSubject}`;
-    const resultBox = document.getElementById("quiz-result-box");
-    resultBox.style.display = "none";
-    resultBox.innerHTML = "";
-    document.getElementById("submit-quiz-btn").disabled = false;
+  function updateTimerDisplay() {
+    const mins = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+    const secs = String(timerSeconds % 60).padStart(2, "0");
+    document.getElementById("cbt-timer").textContent = `⏱ ${mins}:${secs}`;
+  }
 
-    const box = document.getElementById("quiz-questions-box");
+  function updateAnsweredCount(total) {
+    const n = Object.keys(answersMap).length;
+    document.getElementById("answered-counter").textContent = `${n} of ${total} answered`;
+  }
+
+  function renderCbtQuiz() {
+    answersMap = {};
+    submitted = false;
+    const questions = bank[activeSubject] || [];
+    document.getElementById("active-quiz-label").textContent = `${activeTrack} • ${activeSubject}`;
+    const resArea = document.getElementById("quiz-result-area");
+    resArea.style.display = "none";
+    resArea.innerHTML = "";
+    document.getElementById("btn-submit-quiz").disabled = false;
+
+    const container = document.getElementById("quiz-container");
     if (!questions.length) {
-      box.innerHTML = `<p style="color:var(--muted);">No questions added yet for ${currentSubject}.</p>`;
-      updateProgress(0);
+      container.innerHTML = `<p style="color:var(--muted);">No questions available yet for ${activeSubject}.</p>`;
+      updateAnsweredCount(0);
       return;
     }
 
-    box.innerHTML = questions
+    container.innerHTML = questions
       .map((item, qIdx) => {
-        const opts = item.options
+        const optsHtml = item.options
           .map((opt, oIdx) => {
             const letter = ["A", "B", "C", "D"][oIdx] || oIdx + 1;
             return `
-              <label class="ace-opt-label" id="opt-${qIdx}-${oIdx}">
-                <input type="radio" name="ace_q_${qIdx}" value="${oIdx}" onchange="selectOption(${qIdx}, ${oIdx})" />
+              <label class="opt-row" id="opt-row-${qIdx}-${oIdx}">
+                <input type="radio" name="cbt_q_${qIdx}" value="${oIdx}" onchange="pickOption(${qIdx}, ${oIdx})" />
                 <span><strong>${letter}.</strong> ${opt}</span>
               </label>
             `;
           })
           .join("");
-
         return `
-          <div class="ace-q-card" id="q-card-${qIdx}">
-            <div class="ace-q-title">${qIdx + 1}. ${item.q}</div>
-            ${opts}
+          <div class="q-card" id="q-box-${qIdx}">
+            <div class="q-text">${qIdx + 1}. ${item.q}</div>
+            ${optsHtml}
           </div>
         `;
       })
       .join("");
 
-    updateProgress(questions.length);
-    renderQuizHistory();
+    updateAnsweredCount(questions.length);
+    startTimer(questions.length);
+    renderAttemptHistory();
   }
 
-  window.selectOption = function (qIdx, oIdx) {
-    if (quizSubmitted) return;
-    userSelections[qIdx] = oIdx;
-    updateProgress((questionBank[currentSubject] || []).length);
+  window.pickOption = function (qIdx, oIdx) {
+    if (submitted) return;
+    answersMap[qIdx] = oIdx;
+    updateAnsweredCount((bank[activeSubject] || []).length);
   };
 
-  function submitQuiz() {
-    const questions = questionBank[currentSubject] || [];
-    if (!questions.length || quizSubmitted) return;
+  function gradeQuiz(autoExpired = false) {
+    const questions = bank[activeSubject] || [];
+    if (!questions.length || submitted) return;
 
-    const answered = Object.keys(userSelections).length;
-    if (answered < questions.length) {
-      if (!confirm(`You answered ${answered} out of ${questions.length} questions. Submit now?`)) {
+    const answered = Object.keys(answersMap).length;
+    if (!autoExpired && answered < questions.length) {
+      if (!confirm(`You answered ${answered} of ${questions.length} questions. Submit quiz now?`)) {
         return;
       }
     }
 
-    quizSubmitted = true;
+    submitted = true;
+    clearInterval(timerInterval);
     let score = 0;
 
     questions.forEach((item, qIdx) => {
-      const chosen = userSelections[qIdx];
-      const correctIdx = Number(item.answer);
-      const card = document.getElementById(`q-card-${qIdx}`);
+      const chosen = answersMap[qIdx];
+      const correct = Number(item.answer);
+      const box = document.getElementById(`q-box-${qIdx}`);
 
-      document.querySelectorAll(`input[name="ace_q_${qIdx}"]`).forEach((el) => (el.disabled = true));
+      document.querySelectorAll(`input[name="cbt_q_${qIdx}"]`).forEach((el) => (el.disabled = true));
 
       item.options.forEach((_, oIdx) => {
-        const lbl = document.getElementById(`opt-${qIdx}-${oIdx}`);
-        if (!lbl) return;
-        if (oIdx === correctIdx) lbl.classList.add("correct-opt");
-        else if (oIdx === chosen && chosen !== correctIdx) lbl.classList.add("wrong-opt");
+        const row = document.getElementById(`opt-row-${qIdx}-${oIdx}`);
+        if (!row) return;
+        if (oIdx === correct) row.classList.add("is-correct");
+        else if (oIdx === chosen && chosen !== correct) row.classList.add("is-wrong");
       });
 
-      if (chosen === correctIdx) score++;
+      if (chosen === correct) score++;
 
-      if (card && item.explanation) {
+      if (box && item.explanation) {
         const exp = document.createElement("div");
-        exp.className = "ace-explanation";
+        exp.className = "q-exp";
         exp.innerHTML = `<strong>Explanation:</strong> ${item.explanation}`;
-        card.appendChild(exp);
+        box.appendChild(exp);
       }
     });
 
-    const percent = Math.round((score / questions.length) * 100);
-    if (percent >= 50) {
-      streak += 1;
-      localStorage.setItem("aceprep_streak", String(streak));
-      initHeader();
+    const pct = Math.round((score / questions.length) * 100);
+    if (pct >= 50) {
+      streakCount += 1;
+      localStorage.setItem("aceprep_streak_v3", String(streakCount));
+      syncProfileUI();
     }
 
-    document.getElementById("submit-quiz-btn").disabled = true;
-    const resultBox = document.getElementById("quiz-result-box");
-    resultBox.style.display = "block";
-    resultBox.innerHTML = `
-      <h3 style="margin-bottom:6px;">Score: ${score} / ${questions.length} (${percent}%)</h3>
-      <p style="font-size:13.5px; color:#cbd5e1;">
-        ${percent >= 70 ? "Excellent UTME pace! Keep it up." : percent >= 50 ? "Good attempt. Review the highlighted corrections above." : "Review the explanations above and retry to boost accuracy."}
+    document.getElementById("btn-submit-quiz").disabled = true;
+    const resArea = document.getElementById("quiz-result-area");
+    resArea.style.display = "block";
+    resArea.innerHTML = `
+      <h3 style="margin-bottom:6px;">CBT Result: ${score} / ${questions.length} (${pct}%)</h3>
+      <p style="font-size:13.5px; color:#e2e8f0;">
+        ${pct >= 70 ? "Strong UTME score! Keep pushing your speed." : pct >= 50 ? "Solid pass—review the green/red corrections above." : "Review the explanations above and hit Reset to practice again."}
       </p>
     `;
 
-    const history = JSON.parse(localStorage.getItem("aceprep_attempts") || "[]");
+    const history = JSON.parse(localStorage.getItem("aceprep_cbt_history") || "[]");
     history.unshift({
-      subject: currentSubject,
+      subject: activeSubject,
       score,
       total: questions.length,
-      percent,
-      time: new Date().toLocaleString()
+      pct,
+      date: new Date().toLocaleString()
     });
-    localStorage.setItem("aceprep_attempts", JSON.stringify(history.slice(0, 20)));
-    renderQuizHistory();
+    localStorage.setItem("aceprep_cbt_history", JSON.stringify(history.slice(0, 20)));
+    renderAttemptHistory();
   }
 
-  function renderQuizHistory() {
-    const box = document.getElementById("quiz-history-box");
-    const history = JSON.parse(localStorage.getItem("aceprep_attempts") || "[]");
+  function renderAttemptHistory() {
+    const area = document.getElementById("quiz-attempts-area");
+    const history = JSON.parse(localStorage.getItem("aceprep_cbt_history") || "[]");
     if (!history.length) {
-      box.innerHTML = "";
+      area.innerHTML = "";
       return;
     }
-    box.innerHTML =
-      `<h3 style="font-size:14px; margin-bottom:6px;">Recent Quiz Submissions</h3>` +
+    area.innerHTML =
+      `<h3 style="font-size:14px; margin-bottom:6px;">Recent Submitted Attempts</h3>` +
       history
         .slice(0, 6)
         .map(
           (h) => `
-          <div class="ace-history-item">
-            <span><strong>${h.subject}</strong> — ${h.score}/${h.total} (${h.percent}%)</span>
-            <span style="color:var(--muted);">${h.time}</span>
+          <div class="history-row">
+            <span><strong>${h.subject}</strong> — ${h.score}/${h.total} (${h.pct}%)</span>
+            <span style="color:var(--muted);">${h.date}</span>
           </div>
         `
         )
         .join("");
   }
 
-  document.getElementById("submit-quiz-btn").addEventListener("click", submitQuiz);
-  document.getElementById("reset-quiz-btn").addEventListener("click", renderQuiz);
-  document.getElementById("shuffle-quiz-btn").addEventListener("click", () => {
-    const arr = questionBank[currentSubject] || [];
-    for (let i = arr.length - 1; i > 0; i--) {
+  document.getElementById("btn-submit-quiz").addEventListener("click", () => gradeQuiz(false));
+  document.getElementById("btn-reset").addEventListener("click", renderCbtQuiz);
+  document.getElementById("btn-shuffle").addEventListener("click", () => {
+    const list = bank[activeSubject] || [];
+    for (let i = list.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+      [list[i], list[j]] = [list[j], list[i]];
     }
-    renderQuiz();
+    renderCbtQuiz();
   });
 
   // Notes
-  function renderNotes() {
-    document.getElementById("notes-display").innerHTML = `
-      <div class="msg-bubble">
-        <strong>${currentSubject} Core Revision Summary</strong>
-        <p style="margin-top:6px;">${SYLLABUS_NOTES[currentSubject] || "Select a subject to view summary notes."}</p>
+  function renderRevisionNotes() {
+    document.getElementById("notes-content-box").innerHTML = `
+      <div class="bubble">
+        <strong>${activeSubject} Key Syllabus Points</strong>
+        <p style="margin-top:6px;">${REVISION_NOTES[activeSubject] || ""}</p>
       </div>
     `;
   }
 
-  // PDF Viewer
-  let pdfDoc = null;
-  let pdfPageNum = 1;
+  // PDF Vault
+  let loadedPdf = null;
+  let currentPdfPage = 1;
   if (window.pdfjsLib) {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   }
 
-  function renderPdfPage(num) {
-    if (!pdfDoc) return;
-    pdfDoc.getPage(num).then((page) => {
-      const canvas = document.getElementById("pdf-canvas");
+  function drawPdfPage(pageNum) {
+    if (!loadedPdf) return;
+    loadedPdf.getPage(pageNum).then((page) => {
+      const canvas = document.getElementById("pdf-render-canvas");
       const ctx = canvas.getContext("2d");
       const viewport = page.getViewport({ scale: 1.35 });
-      canvas.height = viewport.height;
       canvas.width = viewport.width;
+      canvas.height = viewport.height;
       page.render({ canvasContext: ctx, viewport });
-      document.getElementById("pdf-page-info").textContent = `Page ${num} of ${pdfDoc.numPages}`;
+      document.getElementById("pdf-page-label").textContent = `Page ${pageNum} of ${loadedPdf.numPages}`;
     });
   }
 
-  document.getElementById("pdf-upload-input").addEventListener("change", (e) => {
+  document.getElementById("pdf-file-input").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function () {
-      const typedarray = new Uint8Array(this.result);
-      pdfjsLib.getDocument(typedarray).promise.then((pdf) => {
-        pdfDoc = pdf;
-        pdfPageNum = 1;
-        document.getElementById("pdf-controls").style.display = "flex";
-        document.getElementById("pdf-canvas-wrap").style.display = "block";
-        renderPdfPage(pdfPageNum);
+      pdfjsLib.getDocument(new Uint8Array(this.result)).promise.then((pdf) => {
+        loadedPdf = pdf;
+        currentPdfPage = 1;
+        document.getElementById("pdf-nav-bar").style.display = "flex";
+        document.getElementById("pdf-viewer-box").style.display = "block";
+        drawPdfPage(currentPdfPage);
       });
     };
     reader.readAsArrayBuffer(file);
   });
 
-  document.getElementById("pdf-prev").addEventListener("click", () => {
-    if (pdfDoc && pdfPageNum > 1) renderPdfPage(--pdfPageNum);
+  document.getElementById("pdf-prev-btn").addEventListener("click", () => {
+    if (loadedPdf && currentPdfPage > 1) drawPdfPage(--currentPdfPage);
   });
-  document.getElementById("pdf-next").addEventListener("click", () => {
-    if (pdfDoc && pdfPageNum < pdfDoc.numPages) renderPdfPage(++pdfPageNum);
+  document.getElementById("pdf-next-btn").addEventListener("click", () => {
+    if (loadedPdf && currentPdfPage < loadedPdf.numPages) drawPdfPage(++currentPdfPage);
   });
 
   // Attendance
-  window.markAttendance = function () {
-    const name = document.getElementById("att-name").value.trim() || "Candidate";
-    const track = document.getElementById("att-track").value;
-    const topic = document.getElementById("att-topic").value.trim() || "General Revision";
-    const logs = JSON.parse(localStorage.getItem("aceprep_attendance") || "[]");
-    logs.unshift({
-      name,
-      track,
-      topic,
-      date: new Date().toLocaleString()
-    });
-    localStorage.setItem("aceprep_attendance", JSON.stringify(logs));
-    document.getElementById("att-topic").value = "";
-    renderAttendance();
+  window.recordAttendance = function () {
+    const name = document.getElementById("att-candidate").value.trim() || "Candidate";
+    const track = document.getElementById("att-track-select").value;
+    const topic = document.getElementById("att-topic-input").value.trim() || "General UTME Practice";
+    const records = JSON.parse(localStorage.getItem("aceprep_att_logs") || "[]");
+    records.unshift({ name, track, topic, time: new Date().toLocaleString() });
+    localStorage.setItem("aceprep_att_logs", JSON.stringify(records));
+    document.getElementById("att-topic-input").value = "";
+    renderAttendanceLogs();
   };
 
-  function renderAttendance() {
-    const logs = JSON.parse(localStorage.getItem("aceprep_attendance") || "[]");
-    const html = logs.length
-      ? logs
+  function renderAttendanceLogs() {
+    const records = JSON.parse(localStorage.getItem("aceprep_att_logs") || "[]");
+    const html = records.length
+      ? records
           .map(
-            (l) => `
-            <div class="msg-bubble" style="margin-bottom:8px;">
-              <strong>${l.name}</strong> • ${l.track} Track
-              <div>Topic: ${l.topic}</div>
-              <div class="msg-meta">Present • ${l.date}</div>
+            (r) => `
+            <div class="bubble" style="margin-bottom:8px;">
+              <strong>${r.name}</strong> • ${r.track} Track
+              <div>Topic: ${r.topic}</div>
+              <div class="meta">Present • ${r.time}</div>
             </div>
           `
           )
           .join("")
-      : `<p style="color:var(--muted); font-size:13px;">No attendance entries recorded yet.</p>`;
-
-    document.getElementById("attendance-log-list").innerHTML = html;
-    const admView = document.getElementById("admin-attendance-view");
-    if (admView) admView.innerHTML = html;
+      : `<p style="color:var(--muted); font-size:13px;">No attendance entries logged yet.</p>`;
+    document.getElementById("attendance-feed").innerHTML = html;
+    const adm = document.getElementById("admin-att-list");
+    if (adm) adm.innerHTML = html;
   }
 
   // Message Yourself
-  window.sendSelfMessage = function () {
-    const input = document.getElementById("self-input");
-    const text = input.value.trim();
+  window.addSelfMessage = function () {
+    const box = document.getElementById("self-msg-input");
+    const text = box.value.trim();
     if (!text) return;
-    const notes = JSON.parse(localStorage.getItem("aceprep_self_msgs") || "[]");
-    notes.push({ text, time: new Date().toLocaleString() });
-    localStorage.setItem("aceprep_self_msgs", JSON.stringify(notes));
-    input.value = "";
-    renderSelfMessages();
+    const list = JSON.parse(localStorage.getItem("aceprep_self_notes") || "[]");
+    list.push({ text, time: new Date().toLocaleString() });
+    localStorage.setItem("aceprep_self_notes", JSON.stringify(list));
+    box.value = "";
+    renderSelfBox();
   };
 
-  function renderSelfMessages() {
-    const notes = JSON.parse(localStorage.getItem("aceprep_self_msgs") || "[]");
-    document.getElementById("self-feed").innerHTML = notes.length
-      ? notes
+  function renderSelfBox() {
+    const list = JSON.parse(localStorage.getItem("aceprep_self_notes") || "[]");
+    document.getElementById("self-messages-box").innerHTML = list.length
+      ? list
           .map(
-            (n) => `
-            <div class="msg-bubble">
-              <div>${n.text}</div>
-              <div class="msg-meta">${n.time}</div>
+            (m) => `
+            <div class="bubble">
+              <div>${m.text}</div>
+              <div class="meta">${m.time}</div>
             </div>
           `
           )
           .join("")
-      : `<p style="color:var(--muted); font-size:13px;">Your personal study scratchpad is empty.</p>`;
+      : `<p style="color:var(--muted); font-size:13px;">No personal messages saved yet.</p>`;
   }
 
   // Open AI Tutor
-  window.askAiTutor = async function () {
-    const qInput = document.getElementById("ai-question-input");
-    const promptText = qInput.value.trim();
-    if (!promptText) return;
-    qInput.value = "";
+  window.sendAiPrompt = async function () {
+    const inp = document.getElementById("ai-prompt-input");
+    const query = inp.value.trim();
+    if (!query) return;
+    inp.value = "";
 
-    const feed = document.getElementById("ai-chat-feed");
-    feed.innerHTML += `<div class="msg-bubble"><strong>You:</strong> ${promptText}</div>`;
+    const feed = document.getElementById("ai-messages-box");
+    feed.innerHTML += `<div class="bubble"><strong>You:</strong> ${query}</div>`;
 
-    const apiKey = document.getElementById("ai-api-key").value.trim();
-    let reply = "";
+    const key = document.getElementById("openai-key-input").value.trim();
+    let answer = "";
 
-    if (apiKey) {
+    if (key) {
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`
+            Authorization: `Bearer ${key}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
             messages: [
-              { role: "system", content: "You are a concise Nigerian JAMB/UTME exam tutor." },
-              { role: "user", content: promptText }
+              { role: "system", content: "You are an expert Nigerian JAMB/UTME tutor." },
+              { role: "user", content: query }
             ]
           })
         });
         const data = await res.json();
-        reply = data.choices?.[0]?.message?.content || "";
+        answer = data.choices?.[0]?.message?.content || "";
       } catch (err) {
-        reply = "";
+        answer = "";
       }
     }
 
-    if (!reply) {
-      const lower = promptText.toLowerCase();
-      if (lower.includes("projectile")) {
-        reply = "For JAMB Projectile Motion: Time of flight T = (2u sinθ)/g, Max Height H = (u² sin²θ)/(2g), and Horizontal Range R = (u² sin2θ)/g (maximum when θ = 45°).";
-      } else if (lower.includes("trial balance") || lower.includes("omission")) {
-        reply = "Errors that do NOT affect Trial Balance agreement: Error of Omission, Commission, Principle, Original Entry, Complete Reversal, and Compensating Errors.";
-      } else if (lower.includes("elasticity")) {
-        reply = "Price Elasticity of Demand (PED) = (% Change in Quantity Demanded) ÷ (% Change in Price). If PED > 1 it is elastic; if PED < 1 it is inelastic.";
+    if (!answer) {
+      const qLower = query.toLowerCase();
+      if (qLower.includes("projectile")) {
+        answer = "Projectile Motion Key Formulas: Time of flight T = (2u sinθ)/g, Max Height H = (u² sin²θ)/(2g), Range R = (u² sin2θ)/g (max range at 45°).";
+      } else if (qLower.includes("trial balance")) {
+        answer = "Errors that do NOT affect Trial Balance agreement: Omission, Commission, Principle, Original Entry, Complete Reversal, and Compensating Errors.";
+      } else if (qLower.includes("elasticity")) {
+        answer = "Price Elasticity of Demand (PED) = (% Change in Quantity Demanded) ÷ (% Change in Price). Elastic if PED > 1; Inelastic if PED < 1.";
       } else {
-        reply = `JAMB Study Tip (${currentSubject}): Break the question into given values, identify the core principle (${SYLLABUS_NOTES[currentSubject]}), and eliminate two wrong options before calculating.`;
+        answer = `JAMB Revision Guide (${activeSubject}): ${REVISION_NOTES[activeSubject]} — Break the problem into known values and eliminate distractors first.`;
       }
     }
 
-    feed.innerHTML += `<div class="msg-bubble ai"><strong>AcePrep Tutor:</strong> ${reply}</div>`;
+    feed.innerHTML += `<div class="bubble ai"><strong>AcePrep Tutor:</strong> ${answer}</div>`;
     feed.scrollTop = feed.scrollHeight;
   };
 
   // Admin Studio
-  window.unlockAdmin = function () {
-    const code = document.getElementById("admin-code-input").value.trim();
-    if (code === "ADMIN2026") {
-      document.getElementById("admin-lock-box").style.display = "none";
-      document.getElementById("admin-workspace").style.display = "block";
-      const allSubjects = Object.keys(DEFAULT_QUESTIONS);
-      document.getElementById("adm-subject").innerHTML = allSubjects
+  window.verifyAdmin = function () {
+    if (document.getElementById("admin-passcode").value.trim() === "ADMIN2026") {
+      document.getElementById("admin-gate").style.display = "none";
+      document.getElementById("admin-panel-body").style.display = "block";
+      document.getElementById("admin-subj-select").innerHTML = Object.keys(JAMB_BANK)
         .map((s) => `<option value="${s}">${s}</option>`)
         .join("");
-      renderAttendance();
+      renderAttendanceLogs();
     } else {
-      alert("Invalid Admin Code.");
+      alert("Incorrect Admin Passcode.");
     }
   };
 
-  window.adminAddQuestion = function () {
-    const subj = document.getElementById("adm-subject").value;
-    const q = document.getElementById("adm-q").value.trim();
+  window.addSingleQuestion = function () {
+    const subj = document.getElementById("admin-subj-select").value;
+    const q = document.getElementById("admin-q-text").value.trim();
     const options = [
-      document.getElementById("adm-opt0").value.trim(),
-      document.getElementById("adm-opt1").value.trim(),
-      document.getElementById("adm-opt2").value.trim(),
-      document.getElementById("adm-opt3").value.trim()
+      document.getElementById("admin-opt-a").value.trim(),
+      document.getElementById("admin-opt-b").value.trim(),
+      document.getElementById("admin-opt-c").value.trim(),
+      document.getElementById("admin-opt-d").value.trim()
     ];
-    const answer = Number(document.getElementById("adm-ans").value);
-    const explanation = document.getElementById("adm-exp").value.trim();
+    const answer = Number(document.getElementById("admin-correct-opt").value);
+    const explanation = document.getElementById("admin-exp-text").value.trim();
 
     if (!q || options.some((o) => !o)) {
       alert("Please fill the question and all 4 options.");
       return;
     }
 
-    if (!questionBank[subj]) questionBank[subj] = [];
-    questionBank[subj].push({ q, options, answer, explanation });
-    saveQuestionBank();
-    renderSubjectBars();
-    if (subj === currentSubject) renderQuiz();
+    if (!bank[subj]) bank[subj] = [];
+    bank[subj].push({ q, options, answer, explanation });
+    persistBank();
+    renderSubjectPills();
+    if (subj === activeSubject) renderCbtQuiz();
 
-    ["adm-q", "adm-opt0", "adm-opt1", "adm-opt2", "adm-opt3", "adm-exp"].forEach(
+    ["admin-q-text", "admin-opt-a", "admin-opt-b", "admin-opt-c", "admin-opt-d", "admin-exp-text"].forEach(
       (id) => (document.getElementById(id).value = "")
     );
-    alert(`Added question to ${subj}!`);
+    alert(`Question added to ${subj}!`);
   };
 
-  window.adminBulkImport = function () {
-    const subj = document.getElementById("adm-subject").value;
-    const raw = document.getElementById("adm-bulk-json").value.trim();
+  window.importJsonPack = function () {
+    const subj = document.getElementById("admin-subj-select").value;
     try {
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) throw new Error("Not an array");
-      if (!questionBank[subj]) questionBank[subj] = [];
-      parsed.forEach((item) => {
-        if (item.q && Array.isArray(item.options) && item.options.length === 4) {
-          questionBank[subj].push({
-            q: String(item.q),
-            options: item.options.map(String),
-            answer: Number(item.answer) || 0,
-            explanation: item.explanation ? String(item.explanation) : ""
+      const items = JSON.parse(document.getElementById("admin-json-pack").value.trim());
+      if (!Array.isArray(items)) throw new Error("Expected array");
+      if (!bank[subj]) bank[subj] = [];
+      let added = 0;
+      items.forEach((it) => {
+        if (it.q && Array.isArray(it.options) && it.options.length === 4) {
+          bank[subj].push({
+            q: String(it.q),
+            options: it.options.map(String),
+            answer: Number(it.answer) || 0,
+            explanation: it.explanation ? String(it.explanation) : ""
           });
+          added++;
         }
       });
-      saveQuestionBank();
-      renderSubjectBars();
-      if (subj === currentSubject) renderQuiz();
-      document.getElementById("adm-bulk-json").value = "";
-      alert(`Imported ${parsed.length} questions into ${subj}!`);
+      persistBank();
+      renderSubjectPills();
+      if (subj === activeSubject) renderCbtQuiz();
+      document.getElementById("admin-json-pack").value = "";
+      alert(`Successfully imported ${added} questions into ${subj}!`);
     } catch (e) {
-      alert("Invalid JSON format. Make sure it is a valid array of question objects.");
+      alert("Invalid JSON format. Ensure it is an array of question objects.");
     }
   };
 
-  // Tab Switcher
-  document.querySelectorAll(".tab-btn").forEach((btn) => {
+  // Sidebar Navigation
+  document.querySelectorAll(".nav-item").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach((b) => b.classList.remove("active"));
       document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
       btn.classList.add("active");
-      document.getElementById(btn.dataset.tab).classList.add("active");
+      document.getElementById(btn.dataset.panel).classList.add("active");
+      document.getElementById("topbar-title").textContent = btn.dataset.title;
+      document.getElementById("sidebar").classList.remove("open");
     });
   });
 
-  // Boot
-  initHeader();
-  renderTracks();
-  renderSubjectBars();
-  renderQuiz();
-  renderNotes();
-  renderAttendance();
-  renderSelfMessages();
+  // Initialize
+  syncProfileUI();
+  renderTrackCards();
+  renderSubjectPills();
+  renderCbtQuiz();
+  renderRevisionNotes();
+  renderAttendanceLogs();
+  renderSelfBox();
 </script>
 </body>
 </html>
